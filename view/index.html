@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Hello, world!</title>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="root"></div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+
+</body>
+<script type="application/javascript">
+    $(document).ready()
+    {
+
+        const line = 'В середине августа, перед рождением молодого месяца, вдруг наступили отвратительные погоды, какие так свойственны северному побережью Черного моря.';
+
+        let new_root = 'new_root0';
+        $('<div>').attr('id', new_root).attr('class','word').appendTo('#root');
+
+        for (let i = 0; i < line.length; i++) {
+            const s = line[i];
+            if (s.match(/[A-Za-zА-Яа-я]/)) {
+
+                $('<div>').attr('class', 'field').attr('id', 'div'+i).appendTo("#"+new_root);
+
+
+                $('<input>')
+                    .attr('placeholder', s)
+                    .attr('maxlength', 1)
+                    .attr('size', 1)
+                    .attr('type', 'text')
+                    .appendTo('#div' + i);
+
+
+                $('<div>').attr('class', 'line').appendTo('#div' + i);
+            } else {
+
+
+                $('<span>' + s + '</span>')
+                    .attr('class', 'punctuation')
+                    .appendTo('#'+new_root);
+
+                if(s===' '){
+                    new_root = 'new_root'+i;
+                    $('<div>').attr('id', new_root).attr('class','word').appendTo('#root');
+                }
+            }
+        }
+    }
+</script>
+</html>

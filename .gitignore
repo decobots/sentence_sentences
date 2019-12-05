@@ -1,3 +1,5 @@
 .idea
 .dist
 books.db
+dataSources.xml
+vcs.xml
