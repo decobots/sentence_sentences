@@ -22,6 +22,9 @@ class Lines(Base):
     line = Column(String)
     books_id = Column(Integer, ForeignKey('books.id'))
 
+    def __repr__(self):
+        return self.line
+
 
 class Books(Base):
     __tablename__ = "books"
