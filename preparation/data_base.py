@@ -1,6 +1,5 @@
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
-
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
 Base = declarative_base()
@@ -14,6 +13,16 @@ class DataBase:
         Base.metadata.create_all(self.engine)
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
+
+
+class Words(Base):
+    __tablename__ = 'words'
+    id = Column(Integer, primary_key=True)
+    word = Column(String)
+    lines_id = Column(Integer, ForeignKey('lines.id'))
+
+    def __repr__(self):
+        return self.word
 
 
 class Lines(Base):
