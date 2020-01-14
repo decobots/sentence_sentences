@@ -8,7 +8,9 @@ name = "pypi"
 [packages]
 
 sqlalchemy = "*"
-
+pytest = "*"
+pytest-cov = "*"
+codecov ="*"
 
 [dev-packages]
 

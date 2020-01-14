@@ -2,7 +2,7 @@ import os
 
 from preparation.data_base import Books, Lines, Words
 from preparation.import_text_to_db import process_lines, clean_tabulation, clay, clean_spaces, \
-    process_words
+    process_words, import_book_to_db
 
 src_to_test_text = TEST_DATA_DEFAULT_PATH = os.path.join(os.path.dirname(__file__), 'test_data/test_text.txt')
 
@@ -65,14 +65,15 @@ def test_process_words(empty_table):
     assert all_words[376].word == "моря."
     assert len(empty_table.session.query(Words).filter(Words.lines_id == 1).all()) == 18
 
-# def iesi_import_book_to_database(empty_table):
-#     import_book_to_db(ss=empty_table.session, src=src_to_test_text)
-#
-#     all_books = empty_table.session.query(Books).all()
-#     assert len(all_books) == 1
-#
-#     all_lines = empty_table.session.query(Lines).all()
-#     assert len(all_lines) == 17
-#     assert all_lines[
-#                0].line == "В середине августа, перед рождением молодого месяца, вдруг наступили отвратительные погоды, какие так свойственны северному побережью Черного моря."
-#     assert len(empty_table.session.query(Lines).filter(Lines.books_id == 1).all()) == 17
+
+def test_import_book_to_database(empty_table):
+    import_book_to_db(ss=empty_table.session, src=src_to_test_text)
+
+    all_books = empty_table.session.query(Books).all()
+    assert len(all_books) == 1
+
+    all_lines = empty_table.session.query(Lines).all()
+    assert len(all_lines) == 17
+    assert all_lines[
+               0].line == "В середине августа, перед рождением молодого месяца, вдруг наступили отвратительные погоды, какие так свойственны северному побережью Черного моря."
+    assert len(empty_table.session.query(Lines).filter(Lines.books_id == 1).all()) == 17
