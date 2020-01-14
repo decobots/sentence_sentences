@@ -4,7 +4,7 @@ import pytest
 
 from preparation.data_base import DataBase, Books, Lines, Words
 
-src_to_test_text = 'test_data/test_text.txt'
+src_to_test_text = TEST_DATA_DEFAULT_PATH = os.path.join(os.path.dirname(__file__), 'test_data/test_text.txt')
 test_db_name = 'test_db'
 test_title = "test title - + = !@#$%^&*()!№;%:?*()"
 test_author = "test author '"

@@ -1,8 +1,11 @@
-from preparation.import_text_to_db import process_lines, clean_tabulation, clay, import_book_to_db, clean_spaces, \
-    process_words
-from preparation.data_base import Books, Lines, Words
+import os
 
-src_to_test_text = 'test_data/test_text.txt'
+from preparation.data_base import Books, Lines, Words
+from preparation.import_text_to_db import process_lines, clean_tabulation, clay, clean_spaces, \
+    process_words
+
+src_to_test_text = TEST_DATA_DEFAULT_PATH = os.path.join(os.path.dirname(__file__), 'test_data/test_text.txt')
+
 test_db_name = 'test_db'
 test_title = "test title - + = !@#$%^&*()!№;%:?*()"
 test_author = "test author '"
@@ -57,11 +60,10 @@ def test_process_words(empty_table):
 
     process_lines(book=test_book, session=empty_table.session)
     process_words(book=test_book, session=empty_table.session)
-    all_words= empty_table.session.query(Words).all()
+    all_words = empty_table.session.query(Words).all()
     assert len(all_words) == 377
     assert all_words[376].word == "моря."
     assert len(empty_table.session.query(Words).filter(Words.lines_id == 1).all()) == 18
-
 
 # def iesi_import_book_to_database(empty_table):
 #     import_book_to_db(ss=empty_table.session, src=src_to_test_text)
