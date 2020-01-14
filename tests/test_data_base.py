@@ -56,6 +56,7 @@ def test_lines():
     assert len(all_lines) == 1
     assert all_lines[0].line == test_string
     assert all_lines[0].books_id == test_book.id
+    assert str(all_lines[0]) == test_string
 
     test_db.session.close()
     os.remove(db_name_with_extension)
@@ -81,6 +82,7 @@ def test_words():
     assert len(all_words) == 7
     assert all_words[0].word == 'В'
     assert all_words[6].word == 'месяца'
+    assert str(all_words[6]) == 'месяца'
 
     test_db.session.close()
     os.remove(db_name_with_extension)
