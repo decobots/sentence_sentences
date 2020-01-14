@@ -5,7 +5,8 @@ install:
   - pip install pipenv
   - pipenv install
 script:
-  - pytest --cov-report term --cov=\sentence_sentences\tests
-
+  - pytest
+env:
+  CODECOV_TOKEN="bf62faf1-2352-41b9-a46b-70f8670fe644"
 after_success:
   - codecov
