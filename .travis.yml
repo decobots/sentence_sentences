@@ -5,7 +5,7 @@ install:
   - pip install pipenv
   - pipenv install
 script:
-  - pytest --cov=preparation  --cov-report=xml
+  - pytest --cov=src  --cov-report=xml
 env:
   CODECOV_TOKEN="bf62faf1-2352-41b9-a46b-70f8670fe644"
 after_success:

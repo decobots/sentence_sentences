@@ -1,6 +1,18 @@
 import re
 
-from preparation.data_base import Books, Lines, Words
+from src.preparation.data_base import Books, Lines, Words
+
+tabulation_pattern = re.compile(r'[\t\n\r]*')
+space_pattern = re.compile(r'\s')
+end_of_line_plus_emptyness_after = re.compile(r"([\.;?!])[\t\n\r\s]*")
+
+
+def process_book(session, src, author='', title=''):
+    book = Books(src=src, title=title, author=author)
+
+    session.add(book)
+    session.commit()
+    return book
 
 
 def process_lines(session, book: Books):
@@ -8,8 +20,8 @@ def process_lines(session, book: Books):
         text = f.read()
 
         text = clean_tabulation(text)
-        pattern = r"([\.;?!])[\t\n\r\s]*"
-        sentences = re.split(pattern, text)
+
+        sentences = end_of_line_plus_emptyness_after.split(text)
         new_sentences = []
         for i in range(len(sentences) - 1):
             if i % 2 == 1:
@@ -37,12 +49,12 @@ def process_words(session, book: Books):
 
 
 def clean_tabulation(text):
-    # delete empty symbols between lines. Doesn't delete leading line space.
-    return re.sub(pattern=r'[\t\n\r]*', repl=r'', string=text, flags=re.IGNORECASE)
+    # delete different types of linebreackers.
+    return tabulation_pattern.sub(repl=r'', string=text)
 
 
 def clean_spaces(text):
-    return re.sub(pattern=r'\s', repl=r'', string=text, flags=re.IGNORECASE)
+    return space_pattern.sub(repl=r'', string=text)
 
 
 def clay(lines):
@@ -55,9 +67,6 @@ def clay(lines):
 
 
 def import_book_to_db(ss, src):
-    book = Books(src=src, title="", author='')
-
-    ss.add(book)
-    ss.commit()
+    book = process_book(session=ss, src=src)
     process_lines(book=book, session=ss)
     process_words(book=book, session=ss)
