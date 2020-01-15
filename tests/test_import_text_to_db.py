@@ -1,7 +1,7 @@
 import os
 
-from preparation.data_base import Books, Lines, Words
-from preparation.import_text_to_db import process_lines, clean_tabulation, clay, clean_spaces, \
+from src.preparation.data_base import Books, Lines, Words
+from src.preparation.import_text_to_db import process_lines, clean_tabulation, clay, clean_spaces, \
     process_words, import_book_to_db
 
 src_to_test_text = TEST_DATA_DEFAULT_PATH = os.path.join(os.path.dirname(__file__), 'test_data/test_text.txt')
@@ -40,40 +40,48 @@ def test_clay():
     assert clay(lines) == ['sentence 1.', ' sentence 2[', 'sentence 3!']
 
 
-def test_process_lines(empty_table):
+def test_process_book(empty_database):
     test_book = Books(src=src_to_test_text, title=test_title, author=test_author)
-    empty_table.session.add(test_book)
-    empty_table.session.commit()
-    process_lines(book=test_book, session=empty_table.session)
-    all_lines = empty_table.session.query(Lines).all()
+    empty_database.session.add(test_book)
+    empty_database.session.commit()
+    all_books = empty_database.session.query(Books).all()
+    assert len(all_books) == 1
+    assert all_books[0].src == src_to_test_text
+
+
+def test_process_lines(empty_database):
+    test_book = Books(src=src_to_test_text, title=test_title, author=test_author)
+    empty_database.session.add(test_book)
+    empty_database.session.commit()
+    process_lines(book=test_book, session=empty_database.session)
+    all_lines = empty_database.session.query(Lines).all()
     assert len(all_lines) == 17
-    assert all_lines[
-               0].line == "В середине августа, перед рождением молодого месяца, вдруг наступили отвратительные погоды, какие так свойственны северному побережью Черного моря."
-    # assert all_lines[16] == "И теперь она очень радовалась наступившим прелестным дням, тишине, уединению, чистому воздуху, щебетанью на телеграфных проволоках ласточек, стаившихся к отлету, и ласковому соленому ветерку, слабо тянувшему с моря."
-    assert len(empty_table.session.query(Lines).filter(Lines.books_id == 1).all()) == 17
+    assert all_lines[0].line == "В середине августа, перед рождением молодого месяца, вдруг наступили отвратительные " \
+                                "погоды, какие так свойственны северному побережью Черного моря."
+    assert len(empty_database.session.query(Lines).filter(Lines.books_id == 1).all()) == 17
 
 
-def test_process_words(empty_table):
+def test_process_words(empty_database):
     test_book = Books(src=src_to_test_text, title=test_title, author=test_author)
-    empty_table.session.add(test_book)
-    empty_table.session.commit()
+    empty_database.session.add(test_book)
+    empty_database.session.commit()
 
-    process_lines(book=test_book, session=empty_table.session)
-    process_words(book=test_book, session=empty_table.session)
-    all_words = empty_table.session.query(Words).all()
+    process_lines(book=test_book, session=empty_database.session)
+    process_words(book=test_book, session=empty_database.session)
+    all_words = empty_database.session.query(Words).all()
     assert len(all_words) == 377
     assert all_words[376].word == "моря."
-    assert len(empty_table.session.query(Words).filter(Words.lines_id == 1).all()) == 18
+    assert len(empty_database.session.query(Words).filter(Words.lines_id == 1).all()) == 18
 
 
-def test_import_book_to_database(empty_table):
-    import_book_to_db(ss=empty_table.session, src=src_to_test_text)
+def test_import_book_to_database(empty_database):
+    import_book_to_db(ss=empty_database.session, src=src_to_test_text)
 
-    all_books = empty_table.session.query(Books).all()
+    all_books = empty_database.session.query(Books).all()
     assert len(all_books) == 1
 
-    all_lines = empty_table.session.query(Lines).all()
+    all_lines = empty_database.session.query(Lines).all()
     assert len(all_lines) == 17
-    assert all_lines[
-               0].line == "В середине августа, перед рождением молодого месяца, вдруг наступили отвратительные погоды, какие так свойственны северному побережью Черного моря."
-    assert len(empty_table.session.query(Lines).filter(Lines.books_id == 1).all()) == 17
+    assert all_lines[0].line == "В середине августа, перед рождением молодого месяца, вдруг наступили отвратительные " \
+                                "погоды, какие так свойственны северному побережью Черного моря."
+    assert len(empty_database.session.query(Lines).filter(Lines.books_id == 1).all()) == 17
