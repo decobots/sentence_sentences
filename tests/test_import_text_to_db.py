@@ -1,3 +1,4 @@
+import pytest
 import os
 
 from preparation.data_base import Books, Lines, Words
@@ -85,3 +86,10 @@ def test_import_book_to_database(empty_database):
     assert all_lines[0].line == "В середине августа, перед рождением молодого месяца, вдруг наступили отвратительные " \
                                 "погоды, какие так свойственны северному побережью Черного моря."
     assert len(empty_database.session.query(Lines).filter(Lines.books_id == 1).all()) == 17
+
+
+def test_import_dblicate_of_book_to_database(empty_database, capfd):
+    import_book_to_db(ss=empty_database.session, src=src_to_test_text)
+    import_book_to_db(ss=empty_database.session, src=src_to_test_text)
+    out, err = capfd.readouterr()
+    assert out == 'Book already added\n'

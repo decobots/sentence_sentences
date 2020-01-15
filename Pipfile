@@ -8,11 +8,19 @@ name = "pypi"
 [packages]
 
 sqlalchemy = "*"
+gevent="*"
+falcon="*"
+psycopg2="*"
+sqlalchemy-utils="*"
+gunicorn="*"
+[dev-packages]
+
 pytest = "*"
 pytest-cov = "*"
 codecov ="*"
+waitress="*"
 
-[dev-packages]
+
 
 
 

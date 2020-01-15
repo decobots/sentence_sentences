@@ -3,11 +3,13 @@ python:
   - "3.7"
 install:
   - pip install pipenv
-  - pipenv install
+  - pipenv install --dev
   - python setup.py -q install
+
 script:
   - pytest --cov=preparation  --cov-report=xml
 env:
-  CODECOV_TOKEN="bf62faf1-2352-41b9-a46b-70f8670fe644"
+  -DATABASE_URL='sqlite:///tests/books.db'
+  -CODECOV_TOKEN="bf62faf1-2352-41b9-a46b-70f8670fe644"
 after_success:
   - codecov
