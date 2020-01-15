@@ -1,7 +1,7 @@
 import os
 
-from src.preparation.data_base import Books, Lines, Words
-from src.preparation.import_text_to_db import process_lines, clean_tabulation, clay, clean_spaces, \
+from preparation.data_base import Books, Lines, Words
+from preparation.import_text_to_db import process_lines, clean_tabulation, clay, clean_spaces, \
     process_words, import_book_to_db
 
 src_to_test_text = TEST_DATA_DEFAULT_PATH = os.path.join(os.path.dirname(__file__), 'test_data/test_text.txt')

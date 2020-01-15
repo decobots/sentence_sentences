@@ -4,6 +4,7 @@ python:
 install:
   - pip install pipenv
   - pipenv install
+  - python setup.py -q install
 script:
   - pytest --cov=src  --cov-report=xml
 env:
