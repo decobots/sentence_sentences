@@ -11,6 +11,7 @@ sqlalchemy = "*"
 pytest = "*"
 pytest-cov = "*"
 codecov ="*"
+falcon ="*"
 
 [dev-packages]
 

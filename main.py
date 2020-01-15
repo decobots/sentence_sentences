@@ -1,5 +1,5 @@
-from preparation.data_base import DataBase
-from preparation.import_text_to_db import import_book_to_db
+from src.preparation.data_base import DataBase
+from src.preparation.import_text_to_db import import_book_to_db
 
 if __name__ == '__main__':
     src = 'src/GranatoviyBraslet.txt'
