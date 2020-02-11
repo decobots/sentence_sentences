@@ -1,6 +1,7 @@
 import re
 
-from src.preparation.data_base import Books, Lines, Words
+from preparation.data_base import Books, Lines, Words
+from sqlalchemy.exc import IntegrityError
 
 tabulation_pattern = re.compile(r'[\t\n\r]*')
 space_pattern = re.compile(r'\s')
@@ -67,6 +68,10 @@ def clay(lines):
 
 
 def import_book_to_db(ss, src):
-    book = process_book(session=ss, src=src)
+    try:
+        book = process_book(session=ss, src=src)
+    except IntegrityError:
+        print('Book already added')
+        return
     process_lines(book=book, session=ss)
     process_words(book=book, session=ss)

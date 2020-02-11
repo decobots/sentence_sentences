@@ -6,21 +6,18 @@ from preparation.data_base import DataBase, Books, Lines, Words
 
 src_to_test_text = TEST_DATA_DEFAULT_PATH = os.path.join(os.path.dirname(__file__), 'test_data/test_text.txt')
 
+src_to_db = os.path.join(os.path.dirname(os.path.dirname(__file__)), "tests", 'books.db')  # pragma: no cover
 test_title = "test title - + = !@#$%^&*()!№;%:?*()"
-test_author = "test author '"
+test_author = "test author 'd"
 
 
 def test_db_init():
-    test_db_name = 'test_db'
-    db_name_with_extension = f"{test_db_name}.db"
-    DataBase(test_db_name)
-
-    with open(db_name_with_extension):
+    DataBase()
+    with open(src_to_db):
         pass
-
-    os.remove(db_name_with_extension)
+    os.remove(src_to_db)
     with pytest.raises(FileNotFoundError):
-        open(db_name_with_extension)
+        open(src_to_db)
 
 
 def test_books(empty_database):
@@ -50,6 +47,7 @@ def test_lines(empty_database):
     assert all_lines[0].line == test_string
     assert all_lines[0].books_id == test_book.id
     assert str(all_lines[0]) == test_string
+    assert repr(all_lines[0]) == test_string
 
 
 def test_words_class(empty_database):

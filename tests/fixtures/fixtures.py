@@ -1,16 +1,23 @@
 import os
 
 import pytest
+from preparation.data_base import DataBase
 
-from src.preparation.data_base import DataBase
-
-test_db_name = 'test_db'
-db_name_with_extension = f"{test_db_name}.db"
+src_to_db = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'books.db')  # pragma: no cover
 
 
 @pytest.fixture
 def empty_database():
-    test_db = DataBase(test_db_name)
+    test_db = DataBase()
     yield test_db
     test_db.session.close()
-    os.remove(db_name_with_extension)
+    os.remove(src_to_db)
+
+
+@pytest.fixture()
+def global_variable():
+    key = "TEST_VARIABLE"
+    value = "TEST_VALUE"
+    os.environ[key] = value
+    yield key, value
+    os.environ.pop(key)
