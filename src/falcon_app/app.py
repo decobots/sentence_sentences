@@ -1,7 +1,7 @@
-# falcon.API instances are callable WSGI apps
 import json
 
 import falcon
+from falcon_app.HandleCORS import HandleCORS
 from sqlalchemy import func
 
 from preparation.data_base import DataBase, Lines
@@ -25,10 +25,10 @@ def get_line(session):
 
 
 def create(url=None):
-    app = falcon.API()
+    api = falcon.API(middleware=[HandleCORS()])
     quotes = Quotes(url)
-    app.add_route('/quotes', quotes)
-    return app
+    api.add_route('/quotes', quotes)
+    return api
 
 
 app = create()

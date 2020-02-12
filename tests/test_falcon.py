@@ -17,3 +17,7 @@ def test_get_message(client):
                            'наступили', 'отвратительные', 'погоды,', 'какие', 'так', 'свойственны', 'северному',
                            'побережью', 'Черного', 'моря.']
 
+
+def test_option_message(client):
+    result = client.simulate_options('/quotes')
+    assert result.status == '200 OK'
