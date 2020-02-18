@@ -22,22 +22,11 @@ class DataBase:
         self.session = self.Session()
 
 
-class Words(Base):
-    __tablename__ = 'words'
-    id = Column(Integer, primary_key=True)
-    word = Column(String)
-    lines_id = Column(Integer, ForeignKey('lines.id'))
-
-    def __repr__(self):
-        return self.word
-
-
 class Lines(Base):
     __tablename__ = 'lines'
     id = Column(Integer, primary_key=True)
     line = Column(String)
     books_id = Column(Integer, ForeignKey('books.id'))
-    words = relationship("Words", backref="lines")
 
     def __repr__(self):
         return self.line
