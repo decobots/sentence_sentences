@@ -1,6 +1,6 @@
 import re
 
-from preparation.data_base import Books, Lines, Words
+from preparation.data_base import Books, Lines
 from sqlalchemy.exc import IntegrityError
 
 tabulation_pattern = re.compile(r'[\t\n\r]*')
@@ -37,18 +37,6 @@ def process_lines(session, book: Books):
         session.commit()
 
 
-def process_words(session, book: Books):
-    lines = session.query(Lines).filter(Lines.books_id == book.id).all()
-    for line in lines:
-        pattern = r"\s"
-        words = re.split(pattern, line.line)
-
-        for word in words:
-            w = Words(word=word, lines_id=line.id)
-            session.add(w)
-        session.commit()
-
-
 def clean_tabulation(text):
     # delete different types of linebreackers.
     return tabulation_pattern.sub(repl=r'', string=text)
@@ -74,4 +62,3 @@ def import_book_to_db(ss, src):
         print('Book already added')
         return
     process_lines(book=book, session=ss)
-    process_words(book=book, session=ss)

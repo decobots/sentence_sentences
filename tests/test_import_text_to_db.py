@@ -1,9 +1,7 @@
-import pytest
 import os
 
-from preparation.data_base import Books, Lines, Words
-from preparation.import_text_to_db import process_lines, clean_tabulation, clay, clean_spaces, \
-    process_words, import_book_to_db
+from preparation.data_base import Books, Lines
+from preparation.import_text_to_db import process_lines, clean_tabulation, clay, clean_spaces, import_book_to_db
 
 src_to_test_text = TEST_DATA_DEFAULT_PATH = os.path.join(os.path.dirname(__file__), 'test_data/test_text.txt')
 
@@ -60,19 +58,6 @@ def test_process_lines(empty_database):
     assert all_lines[0].line == "В середине августа, перед рождением молодого месяца, вдруг наступили отвратительные " \
                                 "погоды, какие так свойственны северному побережью Черного моря."
     assert len(empty_database.session.query(Lines).filter(Lines.books_id == 1).all()) == 17
-
-
-def test_process_words(empty_database):
-    test_book = Books(src=src_to_test_text, title=test_title, author=test_author)
-    empty_database.session.add(test_book)
-    empty_database.session.commit()
-
-    process_lines(book=test_book, session=empty_database.session)
-    process_words(book=test_book, session=empty_database.session)
-    all_words = empty_database.session.query(Words).all()
-    assert len(all_words) == 377
-    assert all_words[376].word == "моря."
-    assert len(empty_database.session.query(Words).filter(Words.lines_id == 1).all()) == 18
 
 
 def test_import_book_to_database(empty_database):

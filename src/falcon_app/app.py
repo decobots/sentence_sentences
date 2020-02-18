@@ -16,7 +16,7 @@ class Quotes(object):
         """Handles GET requests"""
         resp.status = falcon.HTTP_200  # This is the default status
         line = get_line(session)
-        resp.body = json.dumps([str(s) for s in line[0].words])
+        resp.body = json.dumps(str(line[0]))
         session.close()
 
 

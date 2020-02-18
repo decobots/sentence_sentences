@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from preparation.data_base import DataBase, Books, Lines, Words
+from preparation.data_base import DataBase, Books, Lines
 
 src_to_test_text = TEST_DATA_DEFAULT_PATH = os.path.join(os.path.dirname(__file__), 'test_data/test_text.txt')
 
@@ -50,23 +50,3 @@ def test_lines(empty_database):
     assert repr(all_lines[0]) == test_string
 
 
-def test_words_class(empty_database):
-    test_book = Books(src=src_to_test_text, title=test_title, author=test_author)
-    empty_database.session.add(test_book)
-    empty_database.session.commit()
-
-    test_string = 'В'
-    test_line = Lines(line=test_string, books_id=test_book.id)
-    empty_database.session.add(test_line)
-    empty_database.session.commit()
-
-    test_words = ['В', 'середине', 'августа,', 'перед', 'рождением', 'молодого', 'месяца']
-    for word in test_words:
-        test_line = Words(word=word, lines_id=1)
-        empty_database.session.add(test_line)
-    empty_database.session.commit()
-    all_words = empty_database.session.query(Words).all()
-    assert len(all_words) == 7
-    assert all_words[0].word == 'В'
-    assert all_words[6].word == 'месяца'
-    assert str(all_words[6]) == 'месяца'
