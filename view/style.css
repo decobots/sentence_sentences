@@ -1,0 +1,60 @@
+body {
+    background: #efefef;
+    min-height: 100vmin;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#root {
+    width: 80vw;
+}
+input {
+    margin: 0.5em 0.2em;
+    background: 0;
+    border: 0;
+    outline: none;
+    width: 1em;
+    height: 1em;
+    max-width: 1em;
+    font-size: 1em;
+    transition: padding 0.3s 0.2s ease;
+
+}
+
+input:focus + .line:after {
+    transform: scaleX(1);
+}
+
+.field {
+    position: relative;
+    display: inline;
+}
+
+.field .line {
+    width: 90%;
+    height: 3px;
+    position: absolute;
+    left: 0px;
+    bottom: -8px;
+    background: #bdc3c7;
+}
+
+.field .line:after {
+    content: " ";
+    position: absolute;
+    float: right;
+    width: 90%;
+    height: 3px;
+    transform: scalex(0);
+    transition: transform 0.3s ease;
+    background: #1abc9c;
+}
+
+.punctuation{
+    width: 1em;
+    display: inline-block;
+}
+.word {
+    display: inline-block;
+}
