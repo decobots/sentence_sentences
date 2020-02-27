@@ -7,6 +7,7 @@ if __name__ == '__main__':  # pragma: no cover
     src = os.path.join(
         os.path.dirname(os.path.dirname(__file__)), 'src', 'texts')  # pragma: no cover
     db = DataBase()  # pragma: no cover
+    db.clean()  # pragma: no cover
     ss = db.session  # pragma: no cover
     for file in os.listdir(src):  # pragma: no cover
         if file.endswith(".txt"):  # pragma: no cover

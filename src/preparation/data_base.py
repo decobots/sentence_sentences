@@ -21,6 +21,10 @@ class DataBase:
         self.Session = sessionmaker(bind=self.engine)
         self.session = self.Session()
 
+    def clean(self):
+        Base.metadata.drop_all(self.engine)
+        Base.metadata.create_all(self.engine)
+
 
 class Lines(Base):
     __tablename__ = 'lines'
