@@ -20,6 +20,26 @@ def test_db_init():
         open(src_to_db)
 
 
+def test_db_clean(empty_database):
+    test_book = Books(src=src_to_test_text, title=test_title, author=test_author)
+    test_string = 'test line - + = !@#$%^&*()!№;%:?*()'
+    test_line=Lines(line=test_string, books_id=test_book.id)
+
+    empty_database.session.add(test_book)
+    empty_database.session.add(test_line)
+    empty_database.session.commit()
+
+    empty_database.clean()
+    books = empty_database.session.query(Books).all()
+    lines = empty_database.session.query(Lines).all()
+    assert len(books) == 0
+    assert len(lines) == 0
+
+
+def test_clean_empty_db(empty_database):
+    empty_database.clean() #test that there no errors when database clean
+
+
 def test_books(empty_database):
     test_book = Books(src=src_to_test_text, title=test_title, author=test_author)
     empty_database.session.add(test_book)
@@ -48,5 +68,3 @@ def test_lines(empty_database):
     assert all_lines[0].books_id == test_book.id
     assert str(all_lines[0]) == test_string
     assert repr(all_lines[0]) == test_string
-
-
