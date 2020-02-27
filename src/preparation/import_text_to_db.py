@@ -9,10 +9,14 @@ end_of_line_plus_emptyness_after = re.compile(r"([\.;?!])[\t\n\r\s]*")
 
 
 def process_book(session, src, author='', title=''):
-    book = Books(src=src, title=title, author=author)
+    with open(src, encoding='utf-8') as f:
+        author = f.readline()
+        title = f.readline()
+        lang = f.readline()
+        book = Books(src=src, title=title, author=author, lang=lang)
 
-    session.add(book)
-    session.commit()
+        session.add(book)
+        session.commit()
     return book
 
 
@@ -31,8 +35,9 @@ def process_lines(session, book: Books):
                 new_sentences.append(sentences[i])
 
         sentences = clay(new_sentences)
-        for s in sentences:
-            line = Lines(line=s, books_id=book.id)
+        # skip author etc lines
+        for s in sentences[3:]:
+            line = Lines(line=s, books_id=book.id, len=len(s))
             session.add(line)
         session.commit()
 

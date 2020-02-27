@@ -9,6 +9,7 @@ src_to_test_text = TEST_DATA_DEFAULT_PATH = os.path.join(os.path.dirname(__file_
 src_to_db = os.path.join(os.path.dirname(os.path.dirname(__file__)), "tests", 'books.db')  # pragma: no cover
 test_title = "test title - + = !@#$%^&*()!№;%:?*()"
 test_author = "test author 'd"
+test_lang = "RU"
 
 
 def test_db_init():
@@ -23,7 +24,7 @@ def test_db_init():
 def test_db_clean(empty_database):
     test_book = Books(src=src_to_test_text, title=test_title, author=test_author)
     test_string = 'test line - + = !@#$%^&*()!№;%:?*()'
-    test_line=Lines(line=test_string, books_id=test_book.id)
+    test_line = Lines(line=test_string, books_id=test_book.id)
 
     empty_database.session.add(test_book)
     empty_database.session.add(test_line)
@@ -37,11 +38,11 @@ def test_db_clean(empty_database):
 
 
 def test_clean_empty_db(empty_database):
-    empty_database.clean() #test that there no errors when database clean
+    empty_database.clean()  # test that there no errors when database clean
 
 
 def test_books(empty_database):
-    test_book = Books(src=src_to_test_text, title=test_title, author=test_author)
+    test_book = Books(src=src_to_test_text, title=test_title, author=test_author, lang=test_lang)
     empty_database.session.add(test_book)
     empty_database.session.commit()
 
@@ -50,6 +51,7 @@ def test_books(empty_database):
     assert all_books[0].src == src_to_test_text
     assert all_books[0].title == test_title
     assert all_books[0].author == test_author
+    assert all_books[0].lang == test_lang
 
 
 def test_lines(empty_database):
@@ -58,13 +60,14 @@ def test_lines(empty_database):
     empty_database.session.commit()
 
     test_string = 'test line - + = !@#$%^&*()!№;%:?*()'
-    test_line = Lines(line=test_string, books_id=test_book.id)
+    test_line = Lines(line=test_string, books_id=test_book.id, len=len(test_string))
     empty_database.session.add(test_line)
     empty_database.session.commit()
 
     all_lines = empty_database.session.query(Lines).all()
     assert len(all_lines) == 1
     assert all_lines[0].line == test_string
+    assert all_lines[0].len == len(all_lines[0].line)
     assert all_lines[0].books_id == test_book.id
     assert str(all_lines[0]) == test_string
     assert repr(all_lines[0]) == test_string

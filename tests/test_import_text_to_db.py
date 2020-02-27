@@ -57,6 +57,7 @@ def test_process_lines(empty_database):
     assert len(all_lines) == 17
     assert all_lines[0].line == "В середине августа, перед рождением молодого месяца, вдруг наступили отвратительные " \
                                 "погоды, какие так свойственны северному побережью Черного моря."
+    assert all_lines[0].len == len(all_lines[0].line)
     assert len(empty_database.session.query(Lines).filter(Lines.books_id == 1).all()) == 17
 
 

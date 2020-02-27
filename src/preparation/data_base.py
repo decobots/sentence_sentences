@@ -31,6 +31,7 @@ class Lines(Base):
     id = Column(Integer, primary_key=True)
     line = Column(String)
     books_id = Column(Integer, ForeignKey('books.id'))
+    len = Column(Integer)
 
     def __repr__(self):
         return self.line
@@ -43,3 +44,4 @@ class Books(Base):
     author = Column(String)
     lines = relationship(Lines)
     src = Column(String, unique=True)
+    lang = Column(String)
