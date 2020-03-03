@@ -10,5 +10,5 @@ if __name__ == '__main__':  # pragma: no cover
     db.clean()  # pragma: no cover
     ss = db.session  # pragma: no cover
     for file in os.listdir(src):  # pragma: no cover
-        if file.endswith(".txt"):  # pragma: no cover
+        if file.endswith(".json"):  # pragma: no cover
             import_book_to_db(ss=ss, src=os.path.join(src, file))  # pragma: no cover

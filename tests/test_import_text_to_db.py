@@ -1,9 +1,10 @@
 import os
 
 from preparation.data_base import Books, Lines
-from preparation.import_text_to_db import process_lines, clean_tabulation, clay, clean_spaces, import_book_to_db
+from preparation.import_text_to_db import process_lines, clean_tabulation, clay, clean_spaces, import_book_to_db, \
+    process_book
 
-src_to_test_text = TEST_DATA_DEFAULT_PATH = os.path.join(os.path.dirname(__file__), 'test_data/test_text.txt')
+src_to_test_text = TEST_DATA_DEFAULT_PATH = os.path.join(os.path.dirname(__file__), 'test_data/test_text.json')
 
 test_db_name = 'test_db'
 test_title = "test title - + = !@#$%^&*()!№;%:?*()"
@@ -40,12 +41,13 @@ def test_clay():
 
 
 def test_process_book(empty_database):
-    test_book = Books(src=src_to_test_text, title=test_title, author=test_author)
-    empty_database.session.add(test_book)
-    empty_database.session.commit()
+    process_book(session=empty_database.session, src=src_to_test_text)
     all_books = empty_database.session.query(Books).all()
     assert len(all_books) == 1
     assert all_books[0].src == src_to_test_text
+    assert all_books[0].author == 'Александр Иванович Куприн.'
+    assert all_books[0].title == 'Гранатовый Браслет.'
+    assert all_books[0].lang == 'RU'
 
 
 def test_process_lines(empty_database):
@@ -57,6 +59,7 @@ def test_process_lines(empty_database):
     assert len(all_lines) == 17
     assert all_lines[0].line == "В середине августа, перед рождением молодого месяца, вдруг наступили отвратительные " \
                                 "погоды, какие так свойственны северному побережью Черного моря."
+    assert all_lines[0].length == len(all_lines[0].line)
     assert len(empty_database.session.query(Lines).filter(Lines.books_id == 1).all()) == 17
 
 
