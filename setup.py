@@ -4,7 +4,7 @@ from setuptools import find_packages
 
 setup(
     name='sentence_sentences',
-    version='1.7',
+    version='1.8',
     description='An old hangman game with a new twist.',
     author='Maria Pritchina',
     author_email='pritchina.m.i@gmail.com',

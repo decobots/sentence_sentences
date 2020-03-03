@@ -1,3 +1,4 @@
+import json
 import re
 
 from preparation.data_base import Books, Lines
@@ -8,11 +9,12 @@ space_pattern = re.compile(r'\s')
 end_of_line_plus_emptyness_after = re.compile(r"([\.;?!])[\t\n\r\s]*")
 
 
-def process_book(session, src, author='', title=''):
+def process_book(session, src):
     with open(src, encoding='utf-8') as f:
-        author = f.readline()
-        title = f.readline()
-        lang = f.readline()
+        data = json.load(f)
+        author = data['author']
+        title = data['title']
+        lang = data['language']
         book = Books(src=src, title=title, author=author, lang=lang)
 
         session.add(book)
@@ -22,7 +24,8 @@ def process_book(session, src, author='', title=''):
 
 def process_lines(session, book: Books):
     with open(book.src, encoding='utf-8') as f:
-        text = f.read()
+        data = json.load(f)
+        text = data['text']
 
         text = clean_tabulation(text)
 
@@ -36,8 +39,8 @@ def process_lines(session, book: Books):
 
         sentences = clay(new_sentences)
         # skip author etc lines
-        for s in sentences[3:]:
-            line = Lines(line=s, books_id=book.id, len=len(s))
+        for s in sentences:
+            line = Lines(line=s, books_id=book.id, length=len(s))
             session.add(line)
         session.commit()
 

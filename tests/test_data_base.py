@@ -60,14 +60,14 @@ def test_lines(empty_database):
     empty_database.session.commit()
 
     test_string = 'test line - + = !@#$%^&*()!№;%:?*()'
-    test_line = Lines(line=test_string, books_id=test_book.id, len=len(test_string))
+    test_line = Lines(line=test_string, books_id=test_book.id, length=len(test_string))
     empty_database.session.add(test_line)
     empty_database.session.commit()
 
     all_lines = empty_database.session.query(Lines).all()
     assert len(all_lines) == 1
     assert all_lines[0].line == test_string
-    assert all_lines[0].len == len(all_lines[0].line)
+    assert all_lines[0].length == len(all_lines[0].line)
     assert all_lines[0].books_id == test_book.id
     assert str(all_lines[0]) == test_string
     assert repr(all_lines[0]) == test_string
