@@ -1,6 +1,8 @@
 import json
 import re
 
+from sqlalchemy.orm.session import Session  as AlchemySession
+
 from preparation.data_base import Books, Lines
 from sqlalchemy.exc import IntegrityError
 
@@ -9,7 +11,7 @@ space_pattern = re.compile(r'\s')
 end_of_line_plus_emptyness_after = re.compile(r"([\.;?!])[\t\n\r\s]*")
 
 
-def process_book(session, src):
+def process_book(session: AlchemySession, src: str) -> Books:
     with open(src, encoding='utf-8') as f:
         data = json.load(f)
         author = data['author']
@@ -22,7 +24,7 @@ def process_book(session, src):
     return book
 
 
-def process_lines(session, book: Books):
+def process_lines(session: AlchemySession, book: Books):
     with open(book.src, encoding='utf-8') as f:
         data = json.load(f)
         text = data['text']
@@ -45,16 +47,16 @@ def process_lines(session, book: Books):
         session.commit()
 
 
-def clean_tabulation(text):
+def clean_tabulation(text: str) -> str:
     # delete different types of linebreackers.
     return tabulation_pattern.sub(repl=r'', string=text)
 
 
-def clean_spaces(text):
+def clean_spaces(text: str) -> str:
     return space_pattern.sub(repl=r'', string=text)
 
 
-def clay(lines):
+def clay(lines: list) -> list:
     # connect ending symbol to the body of line
     result = []
     for i in range(len(lines) - 1):
@@ -63,7 +65,7 @@ def clay(lines):
     return result
 
 
-def import_book_to_db(ss, src):
+def import_book_to_db(ss: AlchemySession, src: str):
     try:
         book = process_book(session=ss, src=src)
     except IntegrityError:
