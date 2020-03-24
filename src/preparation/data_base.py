@@ -13,7 +13,7 @@ class DataBase:
     session = None
     Session = None
 
-    def __init__(self, url=None):
+    def __init__(self, url: str = ''):
         url = url or get_env('DATABASE_URL')
         self.engine = create_engine(url, echo=False)
         Base.metadata.create_all(self.engine)
@@ -33,7 +33,7 @@ class Lines(Base):
     books_id = Column(Integer, ForeignKey('books.id'))
     length = Column(Integer)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.line
 
 
